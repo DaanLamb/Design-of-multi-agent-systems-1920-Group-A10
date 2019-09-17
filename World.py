@@ -14,14 +14,6 @@ Matrix:
 
 '''
     
-class Agent:
-    def __init__(self, x, y):
-        self.posx = x
-        self.posy = y
-        self.points = 0
-        self.hasPlayed = False
-        
-
 
 class World:
     def __init__(self, size):
@@ -44,7 +36,7 @@ class World:
                         self.prisonersDilemma(x, y)
                         
     def prisonersDilemma(self, agent_x, agent_y):
-        pass
+        
         
 
 def main():
