@@ -7,10 +7,15 @@ class Agent:
         self.posy = y
         self.points = 0
         self.emotion = 0
+        self.strategy = 0
 
-    def strategy(self):
+    def updateStatus(self, grid):
+        #self.updateEmotion
+        self.updateStrategy()
+
+    def updateStrategy(self):
         #, and returns wether to cooperate or defect
-        return random.uniform(0,1)
+        self.strategy = random.uniform(0,1)
 
     def updateEmotion(self):
         #updates emotional states
