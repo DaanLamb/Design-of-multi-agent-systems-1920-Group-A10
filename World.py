@@ -1,6 +1,6 @@
 import numpy as np
-
-
+import sys
+from Agent import Agent
 '''
 Every agents plays the prisoners dilemma. 
 When all agents have played, the agent with the highest score is determined
@@ -32,12 +32,38 @@ class World:
             for x in range(self.size):
                 for y in range(self.size):
                     agent = self.grid[x][y]
-                    if not agent.hasPlayed:
-                        self.prisonersDilemma(x, y)
+                    if x+1 < self.size:
+                        agent1 = self.grid[x+1][y]
+                    if x+1 < self.size and y+1 < self.size:
+                        agent2 = self.grid[x+1][y+1]
+                    if y+1 < self.size:
+                        agent3 = self.grid[x][y+1]
+                    if x-1 >= 0 and y-1 >= 0:
+                        agent4 = self.grid[x-1][y-1]
+                    self.prisonersDilemma(agent, agent1)                        
+                    self.prisonersDilemma(agent, agent2)                        
+                    self.prisonersDilemma(agent, agent3)                        
+                    self.prisonersDilemma(agent, agent4)
+                    
                         
-    def prisonersDilemma(self, agent_x, agent_y):
+    def prisonersDilemma(self, agent1, agent2):
+        if agent1.strategy == 0:
+            if agent2.strategy == 0:
+                agent1.points += 3
+                agent2.points += 3
+            elif agent2.strategy == 1:
+                agent1.points += 1
+                agent2.points += 4
+        elif agent1.strategy == 1:
+            if agent2.strategy == 0:
+                agent1.points += 4
+                agent2.points += 1
+            elif agent2.strategy == 1:
+                agent1.points += 3
+                agent2.points += 3
         
-        
+    
+
 
 def main():
     world = World(10)
