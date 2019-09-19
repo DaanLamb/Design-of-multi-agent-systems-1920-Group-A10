@@ -15,7 +15,7 @@ class Agent:
 
     def updateStrategy(self):
         #, and returns wether to cooperate or defect
-        self.strategy = random.uniform(0,1)
+        self.strategy = random.randint(0,1)
 
     def updateEmotion(self):
         #updates emotional states

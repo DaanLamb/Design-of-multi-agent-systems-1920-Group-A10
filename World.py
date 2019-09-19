@@ -7,9 +7,9 @@ When all agents have played, the agent with the highest score is determined
 and copied to the other squared in his neighbourhood
 
 Matrix:
-      c      d
-  c  3 3    1 4
-  d  4 1    2 2
+      s      b
+  s  4 4    2 5
+  b  5 2    3 3
 
 
 '''
@@ -32,6 +32,8 @@ class World:
             for y in range(self.size):
                 agent = self.grid[x][y]
                 agent.updateStatus(self.grid)
+                print(agent.strategy, end=" ")
+            print()
 
     def runSimulation(self, epochs):
         for epoch in range(epochs):
@@ -47,37 +49,33 @@ class World:
                     if y+1 < self.size:
                         agent3 = self.grid[x][y+1]
                         self.prisonersDilemma(agent, agent3)
-                    if x-1 >= 0 and y-1 >= 0:
-                        agent4 = self.grid[x-1][y-1]
+                    if x-1 >= 0 and y+1 < self.size:
+                        agent4 = self.grid[x-1][y+1]
                         self.prisonersDilemma(agent, agent4)
-        self.updateAgents()
-        print(self.grid[1][1].points)
-                    
-                        
+            self.updateAgents()
+        for x in range(self.size):
+            for y in range(self.size):
+                print(self.grid[x][y].points, end=" ")
+            print()
+            
     def prisonersDilemma(self, agent1, agent2):
         if agent1.strategy == 0:
             if agent2.strategy == 0:
-                agent1.points += 3
-                agent2.points += 3
-                print("HELLO")
-            elif agent2.strategy() == 1:
-                agent1.points += 1
+                agent1.points += 4
                 agent2.points += 4
-                print("HELLO")
+            elif agent2.strategy == 1:
+                agent1.points += 2
+                agent2.points += 5
         elif agent1.strategy == 1:
             if agent2.strategy == 0:
-                agent1.points += 4
-                agent2.points += 1
+                agent1.points += 5
+                agent2.points += 2
             elif agent2.strategy == 1:
                 agent1.points += 3
                 agent2.points += 3
-        
-    
-
 
 def main():
-    world = World(10)
-    world.runSimulation(10)
-
+    world = World(10)   
+    world.runSimulation(3)
 
 main()
