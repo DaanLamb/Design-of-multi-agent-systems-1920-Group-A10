@@ -27,23 +27,31 @@ class World:
                 gr[x][y] = Agent(x, y)
         return gr
 
+    def updateAgents(self):
+        for x in range(self.size):
+            for y in range(self.size):
+                agent = self.grid[x][y]
+                agent.updateStatus(self.grid)
+
     def runSimulation(self, epochs):
-        for epoch in epochs:
+        for epoch in range(epochs):
             for x in range(self.size):
                 for y in range(self.size):
                     agent = self.grid[x][y]
                     if x+1 < self.size:
                         agent1 = self.grid[x+1][y]
+                        self.prisonersDilemma(agent, agent1)
                     if x+1 < self.size and y+1 < self.size:
                         agent2 = self.grid[x+1][y+1]
+                        self.prisonersDilemma(agent, agent2)                       
                     if y+1 < self.size:
                         agent3 = self.grid[x][y+1]
+                        self.prisonersDilemma(agent, agent3)
                     if x-1 >= 0 and y-1 >= 0:
                         agent4 = self.grid[x-1][y-1]
-                    self.prisonersDilemma(agent, agent1)                        
-                    self.prisonersDilemma(agent, agent2)                        
-                    self.prisonersDilemma(agent, agent3)                        
-                    self.prisonersDilemma(agent, agent4)
+                        self.prisonersDilemma(agent, agent4)
+        self.updateAgents()
+        print(self.grid[1][1].points)
                     
                         
     def prisonersDilemma(self, agent1, agent2):
@@ -51,9 +59,11 @@ class World:
             if agent2.strategy == 0:
                 agent1.points += 3
                 agent2.points += 3
-            elif agent2.strategy == 1:
+                print("HELLO")
+            elif agent2.strategy() == 1:
                 agent1.points += 1
                 agent2.points += 4
+                print("HELLO")
         elif agent1.strategy == 1:
             if agent2.strategy == 0:
                 agent1.points += 4
@@ -67,7 +77,7 @@ class World:
 
 def main():
     world = World(10)
-
+    world.runSimulation(10)
 
 
 main()
