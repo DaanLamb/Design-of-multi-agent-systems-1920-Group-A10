@@ -1,47 +1,41 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This is a temporary script file.
-"""
-
 import numpy as np
-
-#import seaborn as sns
-
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+
 from matplotlib import colors
 
-data = np.random.randint(0,6,size=(30,30))
+# waarschijnlijk agent array uitlezen en nieuwe (value) array maken
+# array (grid) is accessed [y][x]
 
-#cdict = {
-#'red'  :  ((0., 0., 0.), (0.5, 0.25, 0.25), (1., 1., 1.)),
-#'green':  ((0., 1., 1.), (0.7, 0.0, 0.5), (1., 1., 1.)),
-#'blue' :  ((0., 1., 1.), (0.5, 0.0, 0.0), (1., 1., 1.))
-#}
+lData = np.random.randint(0,7,size=(30,30))
+lMap = colors.ListedColormap(['red','orange','yellow','green','blue','purple','pink'])
 
-cmap = colors.ListedColormap(['red','blue','green','orange','black','white'])
-bounds=[0,5,10]
-norm = colors.BoundaryNorm(bounds, cmap.N)
+img = plt.imshow(lData, cmap=lMap, interpolation='nearest')
 
-#print(data[0][0])
-#print(data[29][0])
-#print(data[0][29])
-#print(data[29][29])
+# eventuele legenda (moeten nog labels bij)
+plt.colorbar(img, cmap=lMap, ticks=[])
 
-img = plt.imshow(data, cmap=cmap, interpolation='nearest')
+plt.title('Spatial representation of agents in IDP grid')
 
-plt.colorbar(img, cmap=cmap, norm=norm, boundaries=bounds, ticks=[0, 5, 10])
+# histogram for plotting ratio bar graph
+hist = [0,0,0,0,0,0,0]
+for i in range(len(lData)):
+    for j in range(len(lData[i])):
+        hist[lData[i][j]] +=1
 
 plt.show()
 
+# TODO
+# ------------------
 # bar fiksen met verhoudingen
-# legenda?
+# legenda labels
 # ruimte tussen agents
-# titel, assen opmaak
-# waardes onder de grafiek
+# assen opmaak
+# waardes (cooperation / defect) onder de grafiek
+# verloop lijn grafieken maken (elke iteratie?)
 
+# GREEN LANTERN EMOTION COLOUR SCHEME
+# ------------------
 # anger = RED
 # greed = ORANGE
 # fear = GEEL
@@ -49,6 +43,3 @@ plt.show()
 # hope = BLUE
 # compassion = PURPLE
 # lief = PINK
-
-
-#plt.plot(data)
