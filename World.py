@@ -34,6 +34,7 @@ class World:
                 agent.updateStatus(self.grid)
                 print(agent.strategy, end=" ")
             print()
+        print("-----------------------")
 
     def runSimulation(self, epochs):
         for epoch in range(epochs):
@@ -74,8 +75,17 @@ class World:
                 agent1.points += 3
                 agent2.points += 3
 
+    def getTotalPoints(self):
+        sum = 0
+        for x in range(self.size):
+            for y in range(self.size):
+                sum += self.grid[x][y].points
+        return sum
+
 def main():
     world = World(10)   
-    world.runSimulation(3)
+    world.runSimulation(10)
+    points = world.getTotalPoints()
+    print("Total points =", points)
 
 main()
