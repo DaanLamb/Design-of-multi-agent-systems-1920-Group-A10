@@ -3,12 +3,12 @@ This program is a Hello, World! for what will be a multi-agent system containing
 
 ## Dependencies 
 The program uses the numpy package. This can be installed by using the command:
-'''bash
+```bash
 $ pip install numpy
-'''
+```
 
 ## Usage
 The program can be run by using the following command:
-'''bash
+```bash
 $ python3 World.py
-'''
+```
