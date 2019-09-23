@@ -41,18 +41,14 @@ class World:
             for x in range(self.size):
                 for y in range(self.size):
                     agent = self.grid[x][y]
-                    if x+1 < self.size:
-                        agent1 = self.grid[x+1][y]
-                        self.prisonersDilemma(agent, agent1)
-                    if x+1 < self.size and y+1 < self.size:
-                        agent2 = self.grid[x+1][y+1]
-                        self.prisonersDilemma(agent, agent2)                       
-                    if y+1 < self.size:
-                        agent3 = self.grid[x][y+1]
-                        self.prisonersDilemma(agent, agent3)
-                    if x-1 >= 0 and y+1 < self.size:
-                        agent4 = self.grid[x-1][y+1]
-                        self.prisonersDilemma(agent, agent4)
+                    agent1 = self.grid[(x+1)%10][y]
+                    self.prisonersDilemma(agent, agent1)
+                    agent2 = self.grid[(x+1)%10][(y+1)%10]
+                    self.prisonersDilemma(agent, agent2)                       
+                    agent3 = self.grid[x][(y+1)%10]
+                    self.prisonersDilemma(agent, agent3)
+                    agent4 = self.grid[x-1][(y+1)%10]
+                    self.prisonersDilemma(agent, agent4)
             self.updateAgents()
         for x in range(self.size):
             for y in range(self.size):
@@ -60,6 +56,8 @@ class World:
             print()
             
     def prisonersDilemma(self, agent1, agent2):
+        agent1.plays += 1
+        agent2.plays += 1
         if agent1.strategy == 0:
             if agent2.strategy == 0:
                 agent1.points += 4
