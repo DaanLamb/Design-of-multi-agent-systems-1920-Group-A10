@@ -1,4 +1,4 @@
-from emotionconsts import *
+#from emotionconsts import *
 
 
 def updateEmotion(self):

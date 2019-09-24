@@ -26,7 +26,7 @@ class World:
         gr = np.full((size, size), Agent)
         for x in range(size):
             for y in range(size):
-                gr[x][y] = Agent(x, y)
+                gr[x][y] = Agent(x, y, COOPERATOR)
         return gr
 
     def updateAgents(self):
@@ -85,7 +85,6 @@ class World:
                             highest = self.grid[x][y].round_points
                             best_agent = self.grid[x][y]
                             print("HIGHEST", x_, y_)
-    
 
     def getTotalPoints(self):
         sum = 0
@@ -95,8 +94,8 @@ class World:
         return sum
 
 def main():
-    #Make sure its divisible by 3 for evolution. Also done in bazzan paper 
-    world = World(12)   
+    #Make sure its divisible by 3 for evolution. Also done in bazzan paper
+    world = World(12)
     world.runSimulation(10)
     points = world.getTotalPoints()
     print("Total points =", points)

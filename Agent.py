@@ -7,6 +7,7 @@ class Agent:
         self.posx = x
         self.posy = y
         self.points = 0
+        self.round_points = 0
         self.emotion = JOY
         self.type = type
         self.strategy = DEFECT if type == DEFECTOR else COOPERATE
@@ -14,7 +15,7 @@ class Agent:
     def updateStatus(self, grid):
         #self.updateEmotion
         self.updateStrategy()
-self.strategy = random.randint(0,1)
+
     def updateStrategy(self):
         #updates the status of the strategy
         if self.type == COOPERATOR or self.type == DEFECTOR:
