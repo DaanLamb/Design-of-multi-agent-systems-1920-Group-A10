@@ -17,6 +17,8 @@ Matrix:
 
 class World:
     def __init__(self, size):
+        if (size%3 != 0):
+            sys.exit("ERROR: Size should be divisible by 3")
         self.size = size
         self.grid = self.generateGrid(size)
 
@@ -54,6 +56,7 @@ class World:
             for y in range(self.size):
                 print(self.grid[x][y].points, end=" ")
             print()
+        self.evolution()
             
     def prisonersDilemma(self, agent1, agent2):
         if agent1.strategy == 0:
@@ -72,9 +75,17 @@ class World:
                 agent2.points += 3
 
     def evolution(self):
-        for x in range(self.size):
-            for y in range(self.size):
-                    
+        best_agent = None
+        highest = -1
+        for x in range(1, self.size - 1, 3):
+            for y in range(1, self.size - 1, 3):
+                for x_ in range(x-1, x+1):
+                    for y_ in range(y-1, y+1):
+                        if self.grid[x_][y_].round_points > highest:
+                            highest = self.grid[x][y].round_points
+                            best_agent = self.grid[x][y]
+                            print("HIGHEST", x_, y_)
+        
 
     def getTotalPoints(self):
         sum = 0
@@ -84,7 +95,8 @@ class World:
         return sum
 
 def main():
-    world = World(10)   
+    #Make sure its divisible by 3 for evolution. Also done in bazzan paper 
+    world = World(12)   
     world.runSimulation(10)
     points = world.getTotalPoints()
     print("Total points =", points)
