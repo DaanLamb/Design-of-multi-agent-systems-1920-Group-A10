@@ -18,6 +18,7 @@ class Agent:
 
     def updateStrategy(self):
         #updates the status of the strategy
+        if()
         self.strategy = random.randint(0,1)
 
     from Emotions import updateEmotion

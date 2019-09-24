@@ -72,7 +72,9 @@ class World:
                 agent2.points += 3
 
     def evolution(self):
-        pass
+        for x in range(self.size):
+            for y in range(self.size):
+
 
     def getTotalPoints(self):
         sum = 0
@@ -86,6 +88,5 @@ def main():
     world.runSimulation(10)
     points = world.getTotalPoints()
     print("Total points =", points)
-    print(EMOTIONAL)
 
 main()
