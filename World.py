@@ -29,12 +29,40 @@ class World:
                 gr[x][y] = Agent(x, y, COOPERATOR)
         return gr
 
+
+    def neighbours(self, agent):
+        #generator that yields the neighbours of an agent with rounding
+        for i in range(-1, 0):
+            yield self.grid[(agent.posx + i) % self.size][agent.posy - 1]
+        yield self.grid[agent.posx - 1][agent.posy]
+        yield self.grid[(agent.posx + 1) % self.size][agent.posy]
+        for i in range(-1, 0):
+            yield self.grid[(agent.posx + i) % self.size][(agent.posy + 1) % self.size]
+
+
+    def countDistress(self, agent):
+        #counts the number of distressed neighbours
+        distressed = 0
+        for agent in self.neighbours(agent):
+            if agent.emotion == DISTRESS:
+                distressed += 1
+        return distressed
+
+    def updateEmotion(self, agent):
+        if agent.points >= POINTS_THRESHOLD:
+            agent.emotion = JOY
+        if agent.points < POINTS_THRESHOLD or self.countDistress(agent) > DISTRESS_THRESHOLD:
+            agent.emotion = DISTRESS
+
+
     def updateAgents(self):
         for x in range(self.size):
             for y in range(self.size):
                 agent = self.grid[x][y]
-                agent.updateStatus(self.grid)
-                print(agent.strategy, end=" ")
+                agent.updateStatus()
+                self.updateEmotion(agent)
+
+                print(agent.emotion, end=" ")
             print()
         print("-----------------------")
 
@@ -92,6 +120,8 @@ class World:
             for y in range(self.size):
                 sum += self.grid[x][y].points
         return sum
+
+
 
 def main():
     #Make sure its divisible by 3 for evolution. Also done in bazzan paper

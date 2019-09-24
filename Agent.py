@@ -1,6 +1,7 @@
 import random
 from constants import *
 
+
 class Agent:
     def __init__(self, x, y, type):
         #initialize the agent with its own position and zero points
@@ -12,8 +13,7 @@ class Agent:
         self.type = type
         self.strategy = DEFECT if type == DEFECTOR else COOPERATE
 
-    def updateStatus(self, grid):
-        #self.updateEmotion
+    def updateStatus(self):
         self.updateStrategy()
 
     def updateStrategy(self):
@@ -26,5 +26,3 @@ class Agent:
         if self.emotion == ANGER or self.emotion == DISTRESS:
             self.strategy = DEFECT
         return
-
-    from Emotions import updateEmotion
