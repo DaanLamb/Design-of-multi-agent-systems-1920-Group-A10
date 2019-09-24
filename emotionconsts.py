@@ -4,4 +4,4 @@ from enum import Enum:
 
 
 class Consts(Enum):
-    
+    JOY
