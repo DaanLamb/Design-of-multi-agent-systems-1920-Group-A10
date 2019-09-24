@@ -1,0 +1,2 @@
+def updateEmotion(self):
+    pass
