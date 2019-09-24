@@ -9,8 +9,7 @@ class Agent:
         self.points = 0
         self.emotion = 0
         self.strategy = 0
-
-
+        self.round_points = 0
 
     def updateStatus(self, grid):
         #self.updateEmotion
