@@ -2,13 +2,13 @@ import random
 from constants import *
 
 class Agent:
-    def __init__(self, x, y):        
+    def __init__(self, x, y):
         #initialize the agent with its own position and zero points
         self.posx = x
         self.posy = y
         self.points = 0
-        self.emotion = 0
-        self.strategy = 0
+        self.emotion = JOY
+        self.strategy = COOPERATE
 
 
 
@@ -17,9 +17,7 @@ class Agent:
         self.updateStrategy()
 
     def updateStrategy(self):
-        #, and returns wether to cooperate or defect
+        #updates the status of the strategy
         self.strategy = random.randint(0,1)
 
-    def updateEmotion(self):
-        #updates emotional states
-        pass
+    from Emotions import updateEmotion

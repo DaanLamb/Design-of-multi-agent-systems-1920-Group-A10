@@ -1,9 +1,9 @@
 import numpy as np
 import sys
-from agent import Agent
+from Agent import Agent
 from constants import *
 '''
-Every agents plays the prisoners dilemma. 
+Every agents plays the prisoners dilemma.
 When all agents have played, the agent with the highest score is determined
 and copied to the other squared in his neighbourhood
 
@@ -44,7 +44,7 @@ class World:
                     agent1 = self.grid[(x+1)%10][y]
                     self.prisonersDilemma(agent, agent1)
                     agent2 = self.grid[(x+1)%10][(y+1)%10]
-                    self.prisonersDilemma(agent, agent2)                       
+                    self.prisonersDilemma(agent, agent2)
                     agent3 = self.grid[x][(y+1)%10]
                     self.prisonersDilemma(agent, agent3)
                     agent4 = self.grid[x-1][(y+1)%10]
@@ -54,7 +54,7 @@ class World:
             for y in range(self.size):
                 print(self.grid[x][y].points, end=" ")
             print()
-            
+
     def prisonersDilemma(self, agent1, agent2):
         if agent1.strategy == 0:
             if agent2.strategy == 0:
@@ -72,7 +72,7 @@ class World:
                 agent2.points += 3
 
     def evolution(self):
-        pass    
+        pass
 
     def getTotalPoints(self):
         sum = 0
@@ -82,7 +82,7 @@ class World:
         return sum
 
 def main():
-    world = World(10)   
+    world = World(10)
     world.runSimulation(10)
     points = world.getTotalPoints()
     print("Total points =", points)
