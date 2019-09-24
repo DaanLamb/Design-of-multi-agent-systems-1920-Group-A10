@@ -1,6 +1,7 @@
 import numpy as np
 import sys
-from Agent import Agent
+from agent import Agent
+from constants import *
 '''
 Every agents plays the prisoners dilemma. 
 When all agents have played, the agent with the highest score is determined
@@ -13,7 +14,6 @@ Matrix:
 
 
 '''
-    
 
 class World:
     def __init__(self, size):
@@ -56,8 +56,6 @@ class World:
             print()
             
     def prisonersDilemma(self, agent1, agent2):
-        agent1.plays += 1
-        agent2.plays += 1
         if agent1.strategy == 0:
             if agent2.strategy == 0:
                 agent1.points += 4
@@ -73,6 +71,9 @@ class World:
                 agent1.points += 3
                 agent2.points += 3
 
+    def evolution(self):
+        pass    
+
     def getTotalPoints(self):
         sum = 0
         for x in range(self.size):
@@ -85,5 +86,6 @@ def main():
     world.runSimulation(10)
     points = world.getTotalPoints()
     print("Total points =", points)
+    print(EMOTIONAL)
 
 main()
