@@ -14,4 +14,10 @@ DEFECT = 1
 
 #emotion thresholds
 POINTS_THRESHOLD = 50 # threshold of amount of points required for JOY
+JOY_THRESHOLD = 3
+
+
+
+
+
 DISTRESS_THRESHOLD = 3 # neighbours that need to be distressed to become distressed
