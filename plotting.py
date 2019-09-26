@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 from matplotlib import rc
 from matplotlib import colors
 
@@ -8,21 +9,25 @@ import matplotlib.image as mpimg
 # Python Cheat Sheet
 # https://perso.limsi.fr/pointal/_media/python:cours:mementopython3-english.pdf
 
-
+lData = np.random.randint(0, 7, size=(30, 30))
+colours = ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink']
+emotions = ['Anger', 'Greed', 'Fear', 'Willpower', 'Hope', 'Compassion', 'Love']
 
 # waarschijnlijk agent array uitlezen en nieuwe (value) array maken
 # array (grid) is accessed [y][x]
 
 # Functie voor het tekenen van de grid met de agents en de emoties
 def drawGrid():
-    lData = np.random.randint(0, 7, size=(30, 30))
-    lMap = colors.ListedColormap(['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink'])
+    lMap = colors.ListedColormap(colours)
+    
+    fig, ax = plt.subplots()    
+    
+    img = ax.imshow(lData, cmap=lMap, interpolation='nearest')
 
-    img = plt.imshow(lData, cmap=lMap, interpolation='nearest')
-
-    # eventuele legenda (moeten nog labels bij)
-    plt.colorbar(img, cmap=lMap, ticks=[])
-
+    # ticks is niet dynamisch, dus moet evt nog veranderd worden
+    cbar = fig.colorbar(img, cmap=lMap, ticks=[0.45, 1.25, 2.1, 3, 3.85, 4.7, 5.5])
+    cbar.ax.set_yticklabels(emotions)
+    
     plt.title('Spatial representation of agents in IDP grid')
 
     plt.show()
@@ -34,68 +39,40 @@ def countGrid():
     for i in range(len(lData)):
         for j in range(len(lData[i])):
             hist[lData[i][j]] += 1
+    # normalize by dividing by total amount of agents
+    return [x / 900 for x in hist] 
 
 # Plot de stacked barplot met de ratio's van emoties
-def drawStackedBar():
+def drawStackedBar(hist):
     #Taken from https://python-graph-gallery.com/12-stacked-barplot-with-matplotlib/
-
-
 
     # y-axis in bold
     rc('font', weight='bold')
 
-    # Values of each group
-    emotion1 = [12]
-    emotion2 = [28]
-    emotion3 = [25]
-    emotion4 = [35]
-
-    # Heights of bars1 + bars2
-    emotions12 = np.add(emotion1, emotion2).tolist()
-    emotions123 = np.add(emotions12, emotion3).tolist()
-
     # The position of the bars on the x-axis
-    r = [0]
-
+    r = [0] 
+    
     # Names of group and bar width
-    names = ['A']
     barWidth = 0.5
-
-    # Create brown bars
-    plt.bar(r, emotion1, color='#7f6d5f', edgecolor='white', width=barWidth)
-    # Create green bars (middle), on top of the firs ones
-    plt.bar(r, emotion2, bottom=emotion1, color='#557f2d', edgecolor='white', width=barWidth)
-    # Create green bars (top)
-    plt.bar(r, emotion3, bottom=emotions12, color='#2d7f5e', edgecolor='white', width=barWidth)
-    # Create next bar
-    plt.bar(r, emotion4, bottom=emotions123, color='#c6c6c6', edgecolor='white', width=barWidth)
-
+    start = 0
+    
+    for i in range(len(hist)):
+        plt.bar(r, hist[i], bottom=start, color=colours[i], edgecolor='white', width=barWidth)
+        start += hist[i]
+    
     # Custom X axis
-    plt.xticks(r, names, fontweight='bold')
-    plt.xlabel("group")
+    plt.xticks(r, [], fontweight='bold')
+    plt.xlabel("Emotion")
 
     # Show graphic
     plt.show()
 
-
 drawGrid()
-drawStackedBar()
+drawStackedBar(countGrid())
 
 # TODO
 # ------------------
-# bar fiksen met verhoudingen
-# legenda labels
 # ruimte tussen agents
 # assen opmaak
 # waardes (cooperation / defect) onder de grafiek
 # verloop lijn grafieken maken (elke iteratie?)
-
-# GREEN LANTERN EMOTION COLOUR SCHEME
-# ------------------
-# anger = RED
-# greed = ORANGE
-# fear = GEEL
-# willpower = GREEN
-# hope = BLUE
-# compassion = PURPLE
-# lief = PINK
