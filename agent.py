@@ -25,11 +25,12 @@ class Agent:
 
     def updateEmotion(self, neighbours, opponent):
         #updates the emotion of the agent based on the rules of the Bazzan, 2001 paper
-        if self.round_points >= POINTS_THRESHOLD or self.countJoy(neighbours) >= JOY_THRESHOLD:
+        if self.round_points >= POINTS_THRESHOLD or self.countJoy(neighbours) >= NEIGHBOUR_THRESHOLD:
+            print("JOY")
             self.emotion == JOY
-        if self.round_points < POINTS_THRESHOLD or self.countDistress(neighbours) >= DISTRESS_THRESHOLD:
+        if self.round_points < POINTS_THRESHOLD or self.countDistress(neighbours) >= NEIGHBOUR_THRESHOLD:
             self.emotion = DISTRESS
-        if self.hasPoorNeighbour(neighbours):
+        if opponent.round_points < POINTS_THRESHOLD:
             self.emotion = PITY
         if self.round_points < POINTS_THRESHOLD and opponent.id in self.prev_strat_neighbours and self.prev_strat_neighbours[opponent.id] == DEFECT:
             self.emotion = ANGER
@@ -49,13 +50,6 @@ class Agent:
             if neighbour.emotion == DISTRESS:
                 distress += 1
         return distress
-
-    def hasPoorNeighbour(self, neighbours):
-        #checks to see if there is a neighbour with less than POINTS_THRESHOLD points
-        for neighbour in neighbours:
-            if neighbour < POINTS_THRESHOLD:
-                return True
-        return False
 
     def updateStrategy(self):
         #update the strategy depending on the rules of the Bazzan, 2001 paper

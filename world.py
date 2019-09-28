@@ -33,11 +33,11 @@ class World:
         gr = np.full((size, size), Agent)
         for x in range(size):
             for y in range(size):
-                r = random.randint(0, 3) # exclusive
-                if r == 0:
-                    gr[x][y] = Agent(x, y, COOPERATOR)
-                elif r == 1:
-                    gr[x][y] = Agent(x, y, DEFECTOR)
+                if random.random() < 0.5:
+                    if random.random() < 0.5:
+                        gr[x][y] = Agent(x, y, COOPERATOR)
+                    else:
+                        gr[x][y] = Agent(x, y, DEFECTOR)
                 else: 
                     gr[x][y] = Agent(x, y, EMOTIONAL)        
         return gr
@@ -84,7 +84,7 @@ class World:
                     if agent.agent_type == EMOTIONAL:
                         agent.update(self.neighbours(agent), agent4)
                     self.prisonersDilemma(agent, agent4)
-            self.evolution()
+            #self.evolution()
             self.resetAgents()
         
         for x in range(self.size):
@@ -166,7 +166,5 @@ def main():
         for y in range(world.size):
             print(world.grid[x][y].emotion, end=" ")
         print()
-
-
 
 main()
