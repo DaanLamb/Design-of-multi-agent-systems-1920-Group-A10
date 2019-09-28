@@ -1,8 +1,9 @@
 import numpy as np
 import sys
-from Agent import Agent
+from agent import Agent
 from constants import *
-from copy import deepcopy
+import copy
+import random
 '''
 Every agents plays the prisoners dilemma.
 When all agents have played, the agent with the highest score is determined
@@ -27,7 +28,13 @@ class World:
         gr = np.full((size, size), Agent)
         for x in range(size):
             for y in range(size):
-                gr[x][y] = Agent(x, y, COOPERATOR)
+                r = random.randint(0, 3)
+                if r == 0:
+                    gr[x][y] = Agent(x, y, COOPERATOR)
+                elif r == 1:
+                    gr[x][y] = Agent(x, y, DEFECTOR)
+                else: 
+                    gr[x][y] = Agent(x, y, EMOTIONAL)        
         return gr
 
     def neighbours(self, agent):
@@ -39,21 +46,10 @@ class World:
         for i in range(-1, 2):
             yield self.grid[(agent.posx + i) % self.size][(agent.posy + 1) % self.size]
 
-    def countJoy(self, agent):
-        joy = 0
-        for neighbour in self.neighbours(agent):
-            if neighbour.emotion == JOY:
-                joy += 1
-        return joy
-
-    def countDistress(self, agent):
-        #counts the number of distressed neighbours
-        distress = 0
-        for neighbour in self.neighbours(agent):
-            if neighbour.emotion == DISTRESS:
-                distress += 1
-        return distress
-
+    def resetAgents(self):
+        for x in range(self.size):
+            for y in range(self.size):
+                self.grid[x][y].round_points = 0
 
     def runSimulation(self, epochs):
         for epoch in range(epochs):
@@ -61,7 +57,8 @@ class World:
             for x in range(self.size):
                 for y in range(self.size):
                     agent = self.grid[x][y]
-            
+                    if agent.agent_type == EMOTIONAL:
+                        agent.update(self.neighbours(agent))
                     agent1 = self.grid[(x+1)%self.size][y]
                     self.prisonersDilemma(agent, agent1)
                     agent2 = self.grid[(x+1)%self.size][(y+1)%self.size]
@@ -71,6 +68,7 @@ class World:
                     agent4 = self.grid[x-1][(y+1)%self.size]
                     self.prisonersDilemma(agent, agent4)
             self.evolution()
+            self.resetAgents()
         
         for x in range(self.size):
             for y in range(self.size):
@@ -82,8 +80,6 @@ class World:
         
 
     def prisonersDilemma(self, agent1, agent2):
-        agent1.plays += 1
-        agent2.plays += 1
         if agent1.strategy == 0:
             if agent2.strategy == 0:
                 agent1.points += 4
@@ -100,22 +96,17 @@ class World:
                 agent2.points += 3
 
     def evolution(self):
-        grid_copy = deepcopy(self.grid)
+        grid_copy = copy.deepcopy(self.grid)
         for x in range(self.size):
             for y in range(self.size):
                 agent = self.grid[x][y]
-                best_type = agent.type
+                best_type = agent.agent_type
                 highest = agent.round_points
                 for neighbour in self.neighbours(agent):
                     if neighbour.round_points > highest:
-                        best_type = neighbour.type
+                        best_type = neighbour.agent_type
                 grid_copy[x][y].type = best_type
-                self.grid = grid_copy
-        
-
-                
-                    
-                
+                self.grid = grid_copy                    
 
     def getTotalPoints(self):
         sum = 0
@@ -127,11 +118,9 @@ class World:
 
 
 def main():
-    print(type)
     world = World(10)
     world.runSimulation(10)
     points = world.getTotalPoints()
     print("Total points =", points)
-    print(type)
 
 main()
