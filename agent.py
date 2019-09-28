@@ -4,30 +4,26 @@ from constants import *
 class Agent:
     def __init__(self, x, y, agent_type):
         #initialize the agent with its own position, zero points, starting emotion and strategy
+        self.id = str(x) + str(y) # to make dictionary works better
         self.posx = x
         self.posy = y
-        self.plays = 0
         self.points = 0
         self.round_points = 0
-        self.emotion = JOY
+        self.emotion = None
         self.agent_type = agent_type
-        self.strategy = None
-        if agent_type == COOPERATOR:
-            self.strategy == COOPERATE
-        elif agent_type == DEFECTOR:
-            self.strategy == DEFECT
-        else:
-            self.updateStrategy()
+        self.prev_strat_neighbours = {}
+        self.strategy = COOPERATE if agent_type == COOPERATOR else DEFECT
 
-    def update(self, neighbours):
+
+    def update(self, neighbours, opponent):
         '''
         update the agents by updating the emotion and updating
         the strategy, which depends on the emotion
         '''
-        self.updateEmotion(neighbours)
+        self.updateEmotion(neighbours, opponent)
         self.updateStrategy()
 
-    def updateEmotion(self, neighbours):
+    def updateEmotion(self, neighbours, opponent):
         #updates the emotion of the agent based on the rules of the Bazzan, 2001 paper
         if self.round_points >= POINTS_THRESHOLD or self.countJoy(neighbours) >= JOY_THRESHOLD:
             self.emotion == JOY
@@ -35,6 +31,8 @@ class Agent:
             self.emotion = DISTRESS
         if self.hasPoorNeighbour(neighbours):
             self.emotion = PITY
+        if self.round_points < POINTS_THRESHOLD and opponent.id in self.prev_strat_neighbours and self.prev_strat_neighbours[opponent.id] == DEFECT:
+            self.emotion = ANGER
 
     def countJoy(self, neighbours):
         #counts the number of joyous neighbours
@@ -67,6 +65,6 @@ class Agent:
             self.strategy = DEFECT
         elif self.emotion == PITY:
             self.strategy = COOPERATE
-        else:
-            print("ANGER")
+        elif self.emotion == ANGER:
+            self.strategy == DEFECT
         

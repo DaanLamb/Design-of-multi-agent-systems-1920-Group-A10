@@ -33,7 +33,7 @@ class World:
         gr = np.full((size, size), Agent)
         for x in range(size):
             for y in range(size):
-                r = random.randint(0, 3)
+                r = random.randint(0, 3) # exclusive
                 if r == 0:
                     gr[x][y] = Agent(x, y, COOPERATOR)
                 elif r == 1:
@@ -68,15 +68,21 @@ class World:
             for x in range(self.size):
                 for y in range(self.size):
                     agent = self.grid[x][y]
-                    if agent.agent_type == EMOTIONAL:
-                        agent.update(self.neighbours(agent))
                     agent1 = self.grid[(x+1)%self.size][y]
+                    if agent.agent_type == EMOTIONAL:
+                        agent.update(self.neighbours(agent), agent1)
                     self.prisonersDilemma(agent, agent1)
                     agent2 = self.grid[(x+1)%self.size][(y+1)%self.size]
+                    if agent.agent_type == EMOTIONAL:
+                        agent.update(self.neighbours(agent), agent2)
                     self.prisonersDilemma(agent, agent2)
                     agent3 = self.grid[x][(y+1)%self.size]
+                    if agent.agent_type == EMOTIONAL:
+                        agent.update(self.neighbours(agent), agent3)
                     self.prisonersDilemma(agent, agent3)
                     agent4 = self.grid[x-1][(y+1)%self.size]
+                    if agent.agent_type == EMOTIONAL:
+                        agent.update(self.neighbours(agent), agent4)
                     self.prisonersDilemma(agent, agent4)
             self.evolution()
             self.resetAgents()
@@ -88,10 +94,6 @@ class World:
         
     def prisonersDilemma(self, agent1, agent2):
         #prisoner's dillema according to the matrix on top of this file
-
-        agent1.plays += 1
-        agent2.plays += 2
-
         if agent1.strategy == COOPERATE:
             if agent2.strategy == COOPERATE:
                 agent1.points += 4
@@ -114,6 +116,8 @@ class World:
                 agent1.round_points += 3
                 agent2.points += 3
                 agent2.round_points += 3
+        agent1.prev_strat_neighbours[agent2.id] = agent2.strategy
+        agent2.prev_strat_neighbours[agent1.id] = agent1.strategy
 
     def evolution(self):
         '''
@@ -131,7 +135,7 @@ class World:
                         highest = neighbour.round_points
                         best_type = neighbour.agent_type
                 grid_copy[x][y].agent_type = best_type
-        self.grid = grid_copy                    
+        self.grid = copy.deepcopy(grid_copy)                    
 
     def getTotalPoints(self):
         #get the total points of all agents
@@ -145,12 +149,24 @@ class World:
 
 def main():
     world = World(10)
+    for x in range(world.size):
+        for y in range(world.size):
+            print(world.grid[x][y].agent_type, end=" ")
+        print()
+    print("=============================")
     world.runSimulation(10)
     points = world.getTotalPoints()
     print("Total points =", points)
     for x in range(world.size):
         for y in range(world.size):
-            print(world.grid[x][y].plays, end=" ")
+            print(world.grid[x][y].agent_type, end=" ")
         print()
+    print("=============================")
+    for x in range(world.size):
+        for y in range(world.size):
+            print(world.grid[x][y].emotion, end=" ")
+        print()
+
+
 
 main()

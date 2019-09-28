@@ -14,6 +14,6 @@ COOPERATE = 0
 DEFECT = 1
 
 #emotion thresholds
-POINTS_THRESHOLD = 50 # threshold of amount of points required for JOY
-JOY_THRESHOLD = 3 # neighbours that need to be joyous to become joyous
-DISTRESS_THRESHOLD = 3 # neighbours that need to be distressed to become distressed
+POINTS_THRESHOLD = 30 # threshold of amount of points required for JOY
+JOY_THRESHOLD = 5 # neighbours that need to be joyous to become joyous
+DISTRESS_THRESHOLD = 5 # neighbours that need to be distressed to become distressed
