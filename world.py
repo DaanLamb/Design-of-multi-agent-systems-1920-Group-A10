@@ -19,12 +19,17 @@ Matrix:
 
 class World:
     def __init__(self, size):
+        '''
+        initialize the world with a size and a (size x size) grid filled with agents
+        the size has to be at least 3 in order for the agents to have 8 neighbours
+        '''
         if (size < 3):
             sys.exit("ERROR: Size should be larger than 3")
         self.size = size
         self.grid = self.generateGrid(size)
 
     def generateGrid(self, size):
+        #generate a numpy array with agents, for now the agent type is random
         gr = np.full((size, size), Agent)
         for x in range(size):
             for y in range(size):
@@ -47,11 +52,17 @@ class World:
             yield self.grid[(agent.posx + i) % self.size][(agent.posy + 1) % self.size]
 
     def resetAgents(self):
+        #reset the round points of all agents
         for x in range(self.size):
             for y in range(self.size):
                 self.grid[x][y].round_points = 0
 
     def runSimulation(self, epochs):
+        '''
+        main loop of the simulation, 
+        every iteration every agent, updated and the prisoner's dilemma
+        is played with 8 neighbours, after this there is an evolution step
+        ''' 
         for epoch in range(epochs):
             print("EPOCH =", epoch)
             for x in range(self.size):
@@ -75,27 +86,40 @@ class World:
                 print(self.grid[x][y].points, end=" ")
             print()
         
-        
-        
-        
-
     def prisonersDilemma(self, agent1, agent2):
-        if agent1.strategy == 0:
-            if agent2.strategy == 0:
+        #prisoner's dillema according to the matrix on top of this file
+
+        agent1.plays += 1
+        agent2.plays += 2
+
+        if agent1.strategy == COOPERATE:
+            if agent2.strategy == COOPERATE:
                 agent1.points += 4
+                agent1.round_points += 4
                 agent2.points += 4
-            elif agent2.strategy == 1:
+                agent2.round_points += 4
+            elif agent2.strategy == DEFECT:
                 agent1.points += 2
+                agent1.round_points += 2
                 agent2.points += 5
-        elif agent1.strategy == 1:
-            if agent2.strategy == 0:
+                agent2.round_points += 5
+        elif agent1.strategy == DEFECT:
+            if agent2.strategy == COOPERATE:
                 agent1.points += 5
+                agent1.round_points += 5
                 agent2.points += 2
-            elif agent2.strategy == 1:
+                agent2.round_points += 2
+            elif agent2.strategy == DEFECT:
                 agent1.points += 3
+                agent1.round_points += 3
                 agent2.points += 3
+                agent2.round_points += 3
 
     def evolution(self):
+        '''
+        evolution step, for every agent, him and his 8 neighbours are compared
+        and the agent type with the most points during the iteration is copied to the middle
+        '''
         grid_copy = copy.deepcopy(self.grid)
         for x in range(self.size):
             for y in range(self.size):
@@ -104,11 +128,13 @@ class World:
                 highest = agent.round_points
                 for neighbour in self.neighbours(agent):
                     if neighbour.round_points > highest:
+                        highest = neighbour.round_points
                         best_type = neighbour.agent_type
-                grid_copy[x][y].type = best_type
-                self.grid = grid_copy                    
+                grid_copy[x][y].agent_type = best_type
+        self.grid = grid_copy                    
 
     def getTotalPoints(self):
+        #get the total points of all agents
         sum = 0
         for x in range(self.size):
             for y in range(self.size):
@@ -122,5 +148,9 @@ def main():
     world.runSimulation(10)
     points = world.getTotalPoints()
     print("Total points =", points)
+    for x in range(world.size):
+        for y in range(world.size):
+            print(world.grid[x][y].plays, end=" ")
+        print()
 
 main()
