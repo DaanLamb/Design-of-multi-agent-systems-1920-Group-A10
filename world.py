@@ -84,9 +84,17 @@ class World:
                     if agent.agent_type == EMOTIONAL:
                         agent.update(self.neighbours(agent), agent4)
                     self.prisonersDilemma(agent, agent4)
-            #self.evolution()
+            self.evolution()
             self.resetAgents()
-        
+            print("Agent types")
+            for x in range(self.size):
+                for y in range(self.size):
+                    print(self.grid[x][y].agent_type, end=" ")
+                print()
+            print("=============================")
+
+        print("END SIMULATION")
+        print("Points")
         for x in range(self.size):
             for y in range(self.size):
                 print(self.grid[x][y].points, end=" ")
@@ -149,6 +157,10 @@ class World:
 
 def main():
     world = World(10)
+    print("Simulation params:")
+    print("Epochs = 10, grid_size = (10,10), pct cooperator/defector and emotional = 50/50")
+    print("Points_threshold = 15, neighbour_threshold = 5")
+    print("INITIAL GRID")
     for x in range(world.size):
         for y in range(world.size):
             print(world.grid[x][y].agent_type, end=" ")
@@ -157,14 +169,10 @@ def main():
     world.runSimulation(10)
     points = world.getTotalPoints()
     print("Total points =", points)
+    print("=============================")
+    print("Agent types")
     for x in range(world.size):
         for y in range(world.size):
             print(world.grid[x][y].agent_type, end=" ")
         print()
-    print("=============================")
-    for x in range(world.size):
-        for y in range(world.size):
-            print(world.grid[x][y].emotion, end=" ")
-        print()
-
 main()
