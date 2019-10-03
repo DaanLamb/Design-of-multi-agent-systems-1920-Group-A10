@@ -1,6 +1,6 @@
 import numpy as np
 import sys
-from agent import Agent
+from agent import *
 from constants import *
 import copy
 import random
@@ -16,6 +16,8 @@ Matrix:
 
 
 '''
+
+
 
 class World:
     def __init__(self, size = SIZE):
@@ -33,13 +35,13 @@ class World:
         gr = np.full((size, size), Agent)
         for x in range(size):
             for y in range(size):
-                if random.random() < 0.5:
+                if random.random() < 0.0:
                     if random.random() < 0.5:
                         gr[x][y] = Agent(x, y, COOPERATOR)
                     else:
                         gr[x][y] = Agent(x, y, DEFECTOR)
-                else: 
-                    gr[x][y] = Agent(x, y, EMOTIONAL)        
+                else:
+                    gr[x][y] = Agent(x, y, EMOTIONAL)
         return gr
 
     def neighbours(self, agent):
@@ -59,45 +61,46 @@ class World:
 
     def runSimulation(self, epochs = EPOCHS):
         '''
-        main loop of the simulation, 
+        main loop of the simulation,
         every iteration every agent, updated and the prisoner's dilemma
         is played with 8 neighbours, after this there is an evolution step
-        ''' 
+        '''
         for epoch in range(epochs):
             print("EPOCH =", epoch)
             for x in range(self.size):
                 for y in range(self.size):
                     agent = self.grid[x][y]
-                    
+
                     agent1 = self.grid[(x+1)%self.size][y]
                     if agent.agent_type == EMOTIONAL:
                         agent.update(self.neighbours(agent), agent1)
                     if agent1.agent_type == EMOTIONAL:
                         agent1.update(self.neighbours(agent1), agent)
                     self.prisonersDilemma(agent, agent1)
-                    
+
                     agent2 = self.grid[(x+1)%self.size][(y+1)%self.size]
                     if agent.agent_type == EMOTIONAL:
                         agent.update(self.neighbours(agent), agent2)
                     if agent2.agent_type == EMOTIONAL:
                         agent2.update(self.neighbours(agent2), agent)
                     self.prisonersDilemma(agent, agent2)
-                    
+
                     agent3 = self.grid[x][(y+1)%self.size]
                     if agent.agent_type == EMOTIONAL:
                         agent.update(self.neighbours(agent), agent3)
                     if agent3.agent_type == EMOTIONAL:
                         agent3.update(self.neighbours(agent3), agent)
                     self.prisonersDilemma(agent, agent3)
-                    
+
                     agent4 = self.grid[x-1][(y+1)%self.size]
                     if agent.agent_type == EMOTIONAL:
                         agent.update(self.neighbours(agent), agent4)
                     if agent4.agent_type == EMOTIONAL:
                         agent4.update(self.neighbours(agent4), agent)
                     self.prisonersDilemma(agent, agent4)
-            
-            #self.evolution()
+
+            #if epoch % 20 == 19:
+            self.evolution()
             self.resetAgents()
             print("Agent types")
             for x in range(self.size):
@@ -112,7 +115,8 @@ class World:
             for y in range(self.size):
                 print(self.grid[x][y].points, end=" ")
             print()
-        
+
+
     def prisonersDilemma(self, agent1, agent2):
         #prisoner's dillema according to the matrix on top of this file
         if agent1.strategy == COOPERATE:
@@ -156,7 +160,7 @@ class World:
                         highest = neighbour.round_points
                         best_type = neighbour.agent_type
                 grid_copy[x][y].agent_type = best_type
-        self.grid = copy.deepcopy(grid_copy)                    
+        self.grid = copy.deepcopy(grid_copy)
 
     def getTotalPoints(self):
         #get the total points of all agents

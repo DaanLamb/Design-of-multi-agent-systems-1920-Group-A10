@@ -1,6 +1,7 @@
 import random
 from constants import *
 
+
 class Agent:
     def __init__(self, x, y, agent_type):
         #initialize the agent with its own position, zero points, starting emotion and strategy
@@ -12,7 +13,7 @@ class Agent:
         self.emotion = None
         self.agent_type = agent_type
         self.prev_strat_neighbours = {}
-        self.strategy = COOPERATE if agent_type == COOPERATOR else DEFECT
+        self.strategy = DEFECT if agent_type == DEFECTOR else COOPERATE
 
 
     def update(self, neighbours, opponent):
@@ -53,11 +54,10 @@ class Agent:
     def updateStrategy(self):
         #update the strategy depending on the rules of the Bazzan, 2001 paper
         if self.emotion == JOY:
-            self.strategy = COOPERATE        
+            self.strategy = COOPERATE
         elif self.emotion == DISTRESS:
             self.strategy = DEFECT
         elif self.emotion == PITY:
             self.strategy = COOPERATE
         elif self.emotion == ANGER:
             self.strategy == DEFECT
-        

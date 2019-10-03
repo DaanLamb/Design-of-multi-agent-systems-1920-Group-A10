@@ -1,5 +1,5 @@
 #simulation parameters
-SIZE = 10
+SIZE = 15
 EPOCHS = 100
 
 #agent types
@@ -18,5 +18,5 @@ COOPERATE = 0
 DEFECT = 1
 
 #emotion thresholds
-POINTS_THRESHOLD = 15 # threshold of amount of points required for JOY
-NEIGHBOUR_THRESHOLD = 3 # number of neighbours that have to have the same emotion in order for the agent to copy it
+POINTS_THRESHOLD = 5 # threshold of amount of points required for JOY
+NEIGHBOUR_THRESHOLD = 6 # number of neighbours that have to have the same emotion in order for the agent to copy it
