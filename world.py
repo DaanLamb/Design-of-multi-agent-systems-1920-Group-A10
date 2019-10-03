@@ -18,7 +18,7 @@ Matrix:
 '''
 
 class World:
-    def __init__(self, size):
+    def __init__(self, size = SIZE):
         '''
         initialize the world with a size and a (size x size) grid filled with agents
         the size has to be at least 3 in order for the agents to have 8 neighbours
@@ -57,7 +57,7 @@ class World:
             for y in range(self.size):
                 self.grid[x][y].round_points = 0
 
-    def runSimulation(self, epochs):
+    def runSimulation(self, epochs = EPOCHS):
         '''
         main loop of the simulation, 
         every iteration every agent, updated and the prisoner's dilemma
@@ -68,23 +68,36 @@ class World:
             for x in range(self.size):
                 for y in range(self.size):
                     agent = self.grid[x][y]
+                    
                     agent1 = self.grid[(x+1)%self.size][y]
                     if agent.agent_type == EMOTIONAL:
                         agent.update(self.neighbours(agent), agent1)
+                    if agent1.agent_type == EMOTIONAL:
+                        agent1.update(self.neighbours(agent1), agent)
                     self.prisonersDilemma(agent, agent1)
+                    
                     agent2 = self.grid[(x+1)%self.size][(y+1)%self.size]
                     if agent.agent_type == EMOTIONAL:
                         agent.update(self.neighbours(agent), agent2)
+                    if agent2.agent_type == EMOTIONAL:
+                        agent2.update(self.neighbours(agent2), agent)
                     self.prisonersDilemma(agent, agent2)
+                    
                     agent3 = self.grid[x][(y+1)%self.size]
                     if agent.agent_type == EMOTIONAL:
                         agent.update(self.neighbours(agent), agent3)
+                    if agent3.agent_type == EMOTIONAL:
+                        agent3.update(self.neighbours(agent3), agent)
                     self.prisonersDilemma(agent, agent3)
+                    
                     agent4 = self.grid[x-1][(y+1)%self.size]
                     if agent.agent_type == EMOTIONAL:
                         agent.update(self.neighbours(agent), agent4)
+                    if agent4.agent_type == EMOTIONAL:
+                        agent4.update(self.neighbours(agent4), agent)
                     self.prisonersDilemma(agent, agent4)
-            self.evolution()
+            
+            #self.evolution()
             self.resetAgents()
             print("Agent types")
             for x in range(self.size):
@@ -156,7 +169,7 @@ class World:
 
 
 def main():
-    world = World(10)
+    world = World()
     print("Simulation params:")
     print("Epochs = 10, grid_size = (10,10), pct cooperator/defector and emotional = 50/50")
     print("Points_threshold = 15, neighbour_threshold = 5")
@@ -166,7 +179,7 @@ def main():
             print(world.grid[x][y].agent_type, end=" ")
         print()
     print("=============================")
-    world.runSimulation(10)
+    world.runSimulation()
     points = world.getTotalPoints()
     print("Total points =", points)
     print("=============================")
