@@ -13,7 +13,11 @@ class Agent:
         self.emotion = None
         self.agent_type = agent_type
         self.prev_strat_neighbours = {}
-        self.strategy = DEFECT if agent_type == DEFECTOR else COOPERATE
+        self.strategy = COOPERATE if agent_type == COOPERATOR else DEFECT
+        self.joy = 0
+        self.distress = 0
+        self.pity = 0
+        self.anger = 0
 
 
     def update(self, neighbours, opponent):
@@ -28,12 +32,16 @@ class Agent:
         #updates the emotion of the agent based on the rules of the Bazzan, 2001 paper
         if self.round_points >= POINTS_THRESHOLD or self.countJoy(neighbours) >= NEIGHBOUR_THRESHOLD:
             self.emotion == JOY
+            self.joy += 1
         if self.round_points < POINTS_THRESHOLD or self.countDistress(neighbours) >= NEIGHBOUR_THRESHOLD:
             self.emotion = DISTRESS
+            self.distress += 1
         if opponent.round_points < POINTS_THRESHOLD:
             self.emotion = PITY
+            self.pity += 1
         if self.round_points < POINTS_THRESHOLD and opponent.id in self.prev_strat_neighbours and self.prev_strat_neighbours[opponent.id] == DEFECT:
             self.emotion = ANGER
+            self.anger += 1
 
     def countJoy(self, neighbours):
         #counts the number of joyous neighbours

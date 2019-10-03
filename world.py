@@ -35,7 +35,7 @@ class World:
         gr = np.full((size, size), Agent)
         for x in range(size):
             for y in range(size):
-                if random.random() < 0.0:
+                if random.random() < 0:
                     if random.random() < 0.5:
                         gr[x][y] = Agent(x, y, COOPERATOR)
                     else:
@@ -99,7 +99,6 @@ class World:
                         agent4.update(self.neighbours(agent4), agent)
                     self.prisonersDilemma(agent, agent4)
 
-            #if epoch % 20 == 19:
             self.evolution()
             self.resetAgents()
             print("Agent types")
@@ -108,6 +107,13 @@ class World:
                     print(self.grid[x][y].agent_type, end=" ")
                 print()
             print("=============================")
+            print("EMOTIONS")
+            for x in range(self.size):
+                for y in range(self.size):
+                    print(self.grid[x][y].emotion, end=" ")
+                print()
+            print("=============================")
+
 
         print("END SIMULATION")
         print("Points")
@@ -191,5 +197,16 @@ def main():
     for x in range(world.size):
         for y in range(world.size):
             print(world.grid[x][y].agent_type, end=" ")
+        print()
+    for x in range(world.size):
+        for y in range(world.size):
+            print(world.grid[x][y].emotion, end=" ")
+        print()
+    for x in range(world.size):
+        for y in range(world.size):
+            print(world.grid[x][y].joy, end=" ")
+            print(world.grid[x][y].distress, end=" ")
+            print(world.grid[x][y].pity, end=" ")
+            print(world.grid[x][y].anger, end=" ")
         print()
 main()
