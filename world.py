@@ -33,7 +33,7 @@ class World:
         gr = np.full((size, size), Agent)
         for x in range(size):
             for y in range(size):
-                if random.random() < 0.5:
+                if random.random() < 0:
                     if random.random() < 0.5:
                         gr[x][y] = Agent(x, y, COOPERATOR)
                     else:
