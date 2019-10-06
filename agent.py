@@ -9,7 +9,7 @@ class Agent:
         self.posy = y
         self.points = 0
         self.round_points = 0
-        self.emotion = None
+        self.emotion = random.randint(0,4)
         self.agent_type = agent_type
         self.prev_strat_neighbours = {}
         self.strategy = COOPERATE if agent_type == COOPERATOR else DEFECT
@@ -30,7 +30,7 @@ class Agent:
     def updateEmotion(self, neighbours, opponent):
         #updates the emotion of the agent based on the rules of the Bazzan, 2001 paper
         if self.round_points >= POINTS_THRESHOLD or self.countJoy(neighbours) >= NEIGHBOUR_THRESHOLD:
-            self.emotion == JOY
+            self.emotion = JOY
             self.joy += 1
         if self.round_points < POINTS_THRESHOLD or self.countDistress(neighbours) >= NEIGHBOUR_THRESHOLD:
             self.emotion = DISTRESS
@@ -67,5 +67,5 @@ class Agent:
         elif self.emotion == PITY:
             self.strategy = COOPERATE
         elif self.emotion == ANGER:
-            self.strategy == DEFECT
+            self.strategy = DEFECT
         
