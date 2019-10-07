@@ -31,7 +31,7 @@ class Agent:
     def updateEmotion(self, neighbours, opponent):
         #updates the emotion of the agent based on the rules of the Bazzan, 2001 paper
         if self.round_points >= POINTS_THRESHOLD or self.countJoy(neighbours) >= NEIGHBOUR_THRESHOLD:
-            self.emotion == JOY
+            self.emotion = JOY
             self.joy += 1
         if self.round_points < POINTS_THRESHOLD or self.countDistress(neighbours) >= NEIGHBOUR_THRESHOLD:
             self.emotion = DISTRESS
