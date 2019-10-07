@@ -156,6 +156,7 @@ class World:
         and the agent type with the most points during the iteration is copied to the middle
         '''
         grid_copy = copy.deepcopy(self.grid)
+        counter = 0
         for x in range(self.size):
             for y in range(self.size):
                 agent = self.grid[x][y]
@@ -163,10 +164,13 @@ class World:
                 highest = agent.round_points
                 for neighbour in self.neighbours(agent):
                     if neighbour.round_points > highest:
+                        if agent.agent_type != best_type:
+                            counter += 1
                         highest = neighbour.round_points
                         best_type = neighbour.agent_type
                 grid_copy[x][y].agent_type = best_type
         self.grid = copy.deepcopy(grid_copy)
+        #print(counter)
 
     def getTotalPoints(self):
         #get the total points of all agents
@@ -202,6 +206,7 @@ def main():
         for y in range(world.size):
             print(world.grid[x][y].emotion, end=" ")
         print()
+    '''
     for x in range(world.size):
         for y in range(world.size):
             print(world.grid[x][y].joy, end=" ")
@@ -209,4 +214,5 @@ def main():
             print(world.grid[x][y].pity, end=" ")
             print(world.grid[x][y].anger, end=" ")
         print()
+    '''
 main()
