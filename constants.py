@@ -18,5 +18,5 @@ COOPERATE = 0
 DEFECT = 1
 
 #emotion thresholds
-POINTS_THRESHOLD = 20 # threshold of amount of points required for JOY
-NEIGHBOUR_THRESHOLD = 3 # number of neighbours that have to have the same emotion in order for the agent to copy it
+POINTS_THRESHOLD = 10 # threshold of amount of points required for JOY
+NEIGHBOUR_THRESHOLD = 5 # number of neighbours that have to have the same emotion in order for the agent to copy it
