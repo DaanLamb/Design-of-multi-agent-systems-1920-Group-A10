@@ -9,7 +9,7 @@ class Agent:
         self.posy = y
         self.points = 0
         self.round_points = 0
-        self.emotion = random.randint(0,4)
+        self.emotion = 0
         self.agent_type = agent_type
         self.prev_strat_neighbours = {}
         self.strategy = COOPERATE if agent_type == COOPERATOR else DEFECT
