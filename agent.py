@@ -18,6 +18,7 @@ class Agent:
         self.distress = 0
         self.pity = 0
         self.anger = 0
+        self.plays = 0
 
 
     def update(self, neighbours, opponent):

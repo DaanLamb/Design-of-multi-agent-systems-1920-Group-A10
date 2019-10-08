@@ -67,11 +67,15 @@ class World:
         '''
         for epoch in range(epochs):
             print("EPOCH =", epoch)
-            for x in range(self.size):
-                for y in range(self.size):
-                    agent = self.grid[x][y]
+            x_rand = random.randint(0, SIZE)
+            y_rand = random.randint(0, SIZE)
+            for i in range(self.size):
+                for j in range(self.size):
+                    x = i + x_rand
+                    y = j + y_rand
+                    agent = self.grid[x%self.size][y%self.size]
 
-                    agent1 = self.grid[(x+1)%self.size][y]
+                    agent1 = self.grid[(x+1)%self.size][y%self.size]
                     if agent.agent_type == EMOTIONAL:
                         agent.update(self.neighbours(agent), agent1)
                     if agent1.agent_type == EMOTIONAL:
@@ -85,14 +89,14 @@ class World:
                         agent2.update(self.neighbours(agent2), agent)
                     self.prisonersDilemma(agent, agent2)
 
-                    agent3 = self.grid[x][(y+1)%self.size]
+                    agent3 = self.grid[x%self.size][(y+1)%self.size]
                     if agent.agent_type == EMOTIONAL:
                         agent.update(self.neighbours(agent), agent3)
                     if agent3.agent_type == EMOTIONAL:
                         agent3.update(self.neighbours(agent3), agent)
                     self.prisonersDilemma(agent, agent3)
 
-                    agent4 = self.grid[x-1][(y+1)%self.size]
+                    agent4 = self.grid[(x-1)%self.size][(y+1)%self.size]
                     if agent.agent_type == EMOTIONAL:
                         agent.update(self.neighbours(agent), agent4)
                     if agent4.agent_type == EMOTIONAL:
@@ -149,6 +153,9 @@ class World:
                 agent2.round_points += 3
         agent1.prev_strat_neighbours[agent2.id] = agent2.strategy
         agent2.prev_strat_neighbours[agent1.id] = agent1.strategy
+        agent1.plays += 1
+        agent2.plays += 1
+
 
     def evolution(self):
         '''
@@ -205,6 +212,11 @@ def main():
     for x in range(world.size):
         for y in range(world.size):
             print(world.grid[x][y].emotion, end=" ")
+        print()
+    print("** PLAYS: **************")
+    for x in range(world.size):
+        for y in range(world.size):
+            print(world.grid[x][y].plays, end=" ")
         print()
     '''
     for x in range(world.size):
