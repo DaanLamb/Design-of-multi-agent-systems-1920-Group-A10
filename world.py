@@ -35,7 +35,7 @@ class World:
         gr = np.full((size, size), Agent)
         for x in range(size):
             for y in range(size):
-                if random.random() < 0.2:
+                if random.random() < 0.5:
                     if random.random() < 0.5:
                         gr[x][y] = Agent(x, y, COOPERATOR)
                     else:
@@ -83,6 +83,7 @@ class World:
                     y = j + y_rand
                     opponents = []
                     agent = self.grid[x%self.size][y%self.size]
+
                     opponents.append(self.grid[(x+1)%self.size][y%self.size])
                     opponents.append(self.grid[(x+1)%self.size][(y+1)%self.size])
                     opponents.append(self.grid[x%self.size][(y+1)%self.size])
@@ -90,7 +91,6 @@ class World:
 
                     random.shuffle(opponents)
                     self.playGames(agent, opponents)
-
             self.evolution()
             self.resetAgents()
             print("Agent types")
@@ -216,5 +216,5 @@ def main():
             print(world.grid[x][y].pity, end=" ")
             print(world.grid[x][y].anger, end=" ")
         print()
-    '''
+
 main()
