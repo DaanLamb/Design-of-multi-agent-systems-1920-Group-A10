@@ -10,7 +10,9 @@ class Agent:
         self.posy = y
         self.points = 0
         self.round_points = 0
-        self.emotion = random.randint(0,4) if agent_type == EMOTIONAL else 9
+        self.emotion = random.randint(0,4)
+        if agent_type != EMOTIONAL:
+            self.emotion = agent_type + 4
         self.agent_type = agent_type
         self.prev_strat_neighbours = {}
         self.strategy = COOPERATE if agent_type == COOPERATOR else DEFECT
@@ -19,6 +21,7 @@ class Agent:
         self.pity = 0
         self.anger = 0
         self.plays = 0
+        self.typedGains = 6 * [0]
 
 
     def update(self, neighbours, opponent):
@@ -28,6 +31,16 @@ class Agent:
         '''
         self.updateEmotion(neighbours, opponent)
         self.updateStrategy()
+
+    def updateScore(self, score):
+        self.points += score
+        self.round_points += score
+        if self.agent_type == EMOTIONAL:
+            self.typedGains[self.emotion] += score
+        if self.agent_type == COOPERATOR:
+            self.typedGains[4] += score
+        if self.agent_type == DEFECTOR:
+            self.typedGains[5] += score
 
     def updateEmotion(self, neighbours, opponent):
         #updates the emotion of the agent based on the rules of the Bazzan, 2001 paper
