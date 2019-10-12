@@ -59,6 +59,14 @@ class World:
             for y in range(self.size):
                 self.grid[x][y].round_points = 0
 
+    def playGames(self, agent, opponents):
+        for adversary in opponents:
+            if agent.agent_type == EMOTIONAL:
+                agent.update(self.neighbours(agent), adversary)
+            if adversary.agent_type == EMOTIONAL:
+                adversary.update(self.neighbours(adversary), agent)
+            self.prisonersDilemma(agent, adversary)
+
     def runSimulation(self, epochs = EPOCHS):
         '''
         main loop of the simulation,
@@ -73,36 +81,16 @@ class World:
                 for j in range(self.size):
                     x = i + x_rand
                     y = j + y_rand
+                    opponents = []
                     agent = self.grid[x%self.size][y%self.size]
-            
-                    agent1 = self.grid[(x+1)%self.size][y%self.size]
-                    if agent.agent_type == EMOTIONAL:
-                        agent.update(self.neighbours(agent), agent1)
-                    if agent1.agent_type == EMOTIONAL:
-                        agent1.update(self.neighbours(agent1), agent)
-                    self.prisonersDilemma(agent, agent1)
 
-                    agent2 = self.grid[(x+1)%self.size][(y+1)%self.size]
-                    if agent.agent_type == EMOTIONAL:
-                        agent.update(self.neighbours(agent), agent2)
-                    if agent2.agent_type == EMOTIONAL:
-                        agent2.update(self.neighbours(agent2), agent)
-                    self.prisonersDilemma(agent, agent2)
+                    opponents.append(self.grid[(x+1)%self.size][y%self.size])
+                    opponents.append(self.grid[(x+1)%self.size][(y+1)%self.size])
+                    opponents.append(self.grid[x%self.size][(y+1)%self.size])
+                    opponents.append(self.grid[(x-1)%self.size][(y+1)%self.size])
 
-                    agent3 = self.grid[x%self.size][(y+1)%self.size]
-                    if agent.agent_type == EMOTIONAL:
-                        agent.update(self.neighbours(agent), agent3)
-                    if agent3.agent_type == EMOTIONAL:
-                        agent3.update(self.neighbours(agent3), agent)
-                    self.prisonersDilemma(agent, agent3)
-
-                    agent4 = self.grid[(x-1)%self.size][(y+1)%self.size]
-                    if agent.agent_type == EMOTIONAL:
-                        agent.update(self.neighbours(agent), agent4)
-                    if agent4.agent_type == EMOTIONAL:
-                        agent4.update(self.neighbours(agent4), agent)
-                    self.prisonersDilemma(agent, agent4)
-
+                    random.shuffle(opponents)
+                    self.playGames(agent, opponents)
             self.evolution()
             self.resetAgents()
             print("Agent types")
@@ -213,12 +201,13 @@ def main():
         for y in range(world.size):
             print(world.grid[x][y].emotion, end=" ")
         print()
+    '''
     print("** PLAYS: **************")
     for x in range(world.size):
         for y in range(world.size):
             print(world.grid[x][y].plays, end=" ")
         print()
-    
+
     for x in range(world.size):
         for y in range(world.size):
             print(world.grid[x][y].joy, end=" ")
