@@ -1,6 +1,6 @@
 #simulation parameters
 SIZE = 15
-EPOCHS = 25
+EPOCHS = 100
 
 #agent types
 COOPERATOR = 0

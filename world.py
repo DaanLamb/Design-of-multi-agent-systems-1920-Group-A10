@@ -193,8 +193,8 @@ class World:
 def main():
     print("Simulation params:", flush=True)
     world = World()
-    print("Epochs = 10, grid_size = (10,10), pct cooperator/defector and emotional = 50/50")
-    print("Points_threshold = 15, neighbour_threshold = 5")
+    print("Epochs =",EPOCHS," grid_size = (",SIZE,",",SIZE,"), pct cooperator/defector and emotional = 50/50")
+    print("Points_threshold =",POINTS_THRESHOLD," neighbour_threshold =",NEIGHBOUR_THRESHOLD)
     print("INITIAL GRID")
     for x in range(world.size):
         for y in range(world.size):
@@ -230,7 +230,7 @@ def main():
     for type in range(6):
         print(total_emotion_gain[type])
 
-    print("strategy gain")
+    print("strategies played")
     print("Cooperating: " + str(total_emotion_gain[COOPERATE]))
     print("Defecting: " + str(total_emotion_gain[DEFECT]))
 
