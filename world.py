@@ -71,13 +71,18 @@ class World:
 
     def outputGains(self, epoch):
         total_emotion_gain = 6 * [0]
+        total_emotions_played = 6 * [0]
         for x in range(self.size):
             for y in range(self.size):
                 for type in range(6):
                     total_emotion_gain[type] += self.grid[x][y].typedGains[type]
+                    total_emotions_played[type] += self.grid[x][y].emotionsPlayed[type]
         self.file.write(str(epoch) + ",")
         for type in range(6):
-            self.file.write(str(total_emotion_gain[type]) + ",")
+            average = 0
+            if total_emotions_played[type] != 0:
+                average = total_emotion_gain[type] / total_emotions_played[type]
+            self.file.write(str(average) + ",")
         self.file.write("\n")
 
     def runSimulation(self, epochs = EPOCHS):
@@ -202,8 +207,6 @@ def main():
         print()
     print("=============================")
     world.runSimulation()
-    points = world.getTotalPoints()
-    print("Total points =", points)
     print("=============================")
     print("Agent types")
     for x in range(world.size):
@@ -229,6 +232,10 @@ def main():
     print("Emotional gain")
     for type in range(6):
         print(total_emotion_gain[type])
+
+
+    points = world.getTotalPoints()
+    print("Total points =", points)
 
     print("strategies played")
     print("Cooperating: " + str(total_emotion_gain[COOPERATE]))

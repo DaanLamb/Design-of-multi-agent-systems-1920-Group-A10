@@ -22,6 +22,7 @@ class Agent:
         self.anger = 0
         self.plays = 0
         self.typedGains = 6 * [0]
+        self.emotionsPlayed = 6 * [0]
 
 
     def update(self, neighbours, opponent):
@@ -37,10 +38,13 @@ class Agent:
         self.round_points += score
         if self.agent_type == EMOTIONAL:
             self.typedGains[self.emotion] += score
+            self.emotionsPlayed[self.emotion] += 1
         if self.agent_type == COOPERATOR:
             self.typedGains[4] += score
+            self.emotionsPlayed[COOP] += 1
         if self.agent_type == DEFECTOR:
             self.typedGains[5] += score
+            self.emotionsPlayed[DEF] += 1
 
     def updateEmotion(self, neighbours, opponent):
         #updates the emotion of the agent based on the rules of the Bazzan, 2001 paper
