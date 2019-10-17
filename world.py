@@ -4,6 +4,7 @@ from agent import *
 from constants import *
 import copy
 import random
+import matplotlib.pyplot as plt
 '''
 Every agents plays the prisoners dilemma.
 When all agents have played, the agent with the highest score is determined
@@ -126,7 +127,7 @@ class World:
                 print()
             print("=============================")
 
-
+        self.file.close()
         print("END SIMULATION")
         print("Points")
         for x in range(self.size):
@@ -193,6 +194,15 @@ class World:
                 sum += self.grid[x][y].points
         return sum
 
+def plot():
+    file = open("gain_per_type.csv", "r")
+    labels = ["joy", "distress", "pity", "anger", "cooperate", "defect"]
+    data = np.loadtxt(file, delimiter=',',usecols=range(7) , unpack=True)
+    iter, results = np.split(data, [1])
+    fig, ax = plt.subplots()
+    ax.stackplot(iter.flatten(), results, labels=labels)
+    ax.legend(loc='upper left')
+    plt.show()
 
 
 def main():
@@ -241,6 +251,7 @@ def main():
     print("Cooperating: " + str(total_emotion_gain[COOPERATE]))
     print("Defecting: " + str(total_emotion_gain[DEFECT]))
 
+    plot()
     '''
     print("** PLAYS: **************")
     for x in range(world.size):
