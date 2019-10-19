@@ -1,9 +1,12 @@
 import random
 from constants import *
+exclude = ["NEIGHBOUR_THRESHOLD", "POINTS_THRESHOLD"]
+for e in exclude:
+    del globals()[e]
 
 
 class Agent:
-    def __init__(self, x, y, agent_type):
+    def __init__(self, x, y, agent_type, NEIGHBOUR_THRESHOLD, POINTS_THRESHOLD):
         #initialize the agent with its own position, zero points, starting emotion and strategy
         self.id = str(x) + str(y) # to make dictionary works better
         self.posx = x
@@ -23,6 +26,8 @@ class Agent:
         self.plays = 0
         self.typedGains = 6 * [0]
         self.emotionsPlayed = 6 * [0]
+        self.NEIGHBOUR_THRESHOLD = NEIGHBOUR_THRESHOLD
+        self.POINTS_THRESHOLD = POINTS_THRESHOLD
 
 
     def update(self, neighbours, opponent):
@@ -48,16 +53,16 @@ class Agent:
 
     def updateEmotion(self, neighbours, opponent):
         #updates the emotion of the agent based on the rules of the Bazzan, 2001 paper
-        if self.round_points >= POINTS_THRESHOLD or self.countJoy(neighbours) >= NEIGHBOUR_THRESHOLD:
+        if self.round_points >= self.POINTS_THRESHOLD or self.countJoy(neighbours) >= self.NEIGHBOUR_THRESHOLD:
             self.emotion = JOY
             self.joy += 1
-        if self.round_points < POINTS_THRESHOLD or self.countDistress(neighbours) >= NEIGHBOUR_THRESHOLD:
+        if self.round_points < self.POINTS_THRESHOLD or self.countDistress(neighbours) >= self.NEIGHBOUR_THRESHOLD:
             self.emotion = DISTRESS
             self.distress += 1
-        if opponent.round_points < POINTS_THRESHOLD:
+        if opponent.round_points < self.POINTS_THRESHOLD:
             self.emotion = PITY
             self.pity += 1
-        if self.round_points < POINTS_THRESHOLD and opponent.id in self.prev_strat_neighbours and self.prev_strat_neighbours[opponent.id] == DEFECT:
+        if self.round_points < self.POINTS_THRESHOLD and opponent.id in self.prev_strat_neighbours and self.prev_strat_neighbours[opponent.id] == DEFECT:
             self.emotion = ANGER
             self.anger += 1
 

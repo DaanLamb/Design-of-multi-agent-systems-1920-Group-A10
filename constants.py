@@ -1,6 +1,6 @@
 #simulation parameters
 SIZE = 30
-EPOCHS = 20
+EPOCHS = 100
 
 #agent types
 COOPERATOR = 0
@@ -18,6 +18,11 @@ DEF = 5
 #strategy
 COOPERATE = 0
 DEFECT = 1
+
+#Payoff matrix
+R = 1
+T = 1.9
+S = P = 0
 
 #emotion thresholds
 POINTS_THRESHOLD = 20 # threshold of amount of points required for JOY
