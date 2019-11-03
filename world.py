@@ -38,8 +38,8 @@ class World:
         gr = np.full((size, size), Agent)
         for x in range(size):
             for y in range(size):
-                if random.random() < 0.5:
-                    if random.random() < 0.5:
+                if random.random() < 0:
+                    if random.random() < 2:
                         gr[x][y] = Agent(x, y, COOPERATOR)
                     else:
                         gr[x][y] = Agent(x, y, DEFECTOR)
@@ -80,10 +80,11 @@ class World:
                     total_emotions_played[type] += self.grid[x][y].emotionsPlayed[type]
         self.file.write(str(epoch) + ",")
         for type in range(6):
-            average = 0
-            if total_emotions_played[type] != 0:
-                average = total_emotion_gain[type] / total_emotions_played[type]
-            self.file.write(str(average) + ",")
+            #average = 0
+            #if total_emotions_played[type] != 0:
+            #    average = total_emotion_gain[type] / total_emotions_played[type]
+            #self.file.write(str(average) + ",")
+            self.file.write(str(total_emotion_gain[type]) + ",")
         self.file.write("\n")
 
     def runSimulation(self, epochs = EPOCHS):
@@ -141,18 +142,18 @@ class World:
         #prisoner's dillema according to the matrix on top of this file
         if agent1.strategy == COOPERATE:
             if agent2.strategy == COOPERATE:
-                agent1.updateScore(4)
-                agent2.updateScore(4)
+                agent1.updateScore(1)
+                agent2.updateScore(1)
             elif agent2.strategy == DEFECT:
-                agent1.updateScore(2)
-                agent2.updateScore(5)
+                agent1.updateScore(0)
+                agent2.updateScore(1.9)
         elif agent1.strategy == DEFECT:
             if agent2.strategy == COOPERATE:
-                agent1.updateScore(5)
-                agent2.updateScore(2)
+                agent1.updateScore(1.9)
+                agent2.updateScore(0)
             elif agent2.strategy == DEFECT:
-                agent1.updateScore(3)
-                agent2.updateScore(3)
+                agent1.updateScore(0)
+                agent2.updateScore(0)
         self.countStrategy[agent1.strategy] +=1
         self.countStrategy[agent2.strategy] +=1
         agent1.prev_strat_neighbours[agent2.id] = agent2.strategy
@@ -251,7 +252,7 @@ def main():
     print("Cooperating: " + str(total_emotion_gain[COOPERATE]))
     print("Defecting: " + str(total_emotion_gain[DEFECT]))
 
-    plot()
+    #plot()
     '''
     print("** PLAYS: **************")
     for x in range(world.size):
