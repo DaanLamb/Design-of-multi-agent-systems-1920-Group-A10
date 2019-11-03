@@ -33,6 +33,7 @@ class World:
             sys.exit("ERROR: Size should be larger than 3")
         self.size = size
         self.grid = self.generateGrid(size, NEIGHBOUR_THRESHOLD, POINTS_THRESHOLD)
+        #this is where the results are written to
         s = "paramsweep/gain_per_type_" + str(POINTS_THRESHOLD) + "_" + str(NEIGHBOUR_THRESHOLD) + ".csv"
         self.file = open(s, "w")
         self.countStrategy = 2 * [0]
@@ -67,6 +68,8 @@ class World:
                 self.grid[x][y].round_points = 0
 
     def playGames(self, agent, opponents):
+        #function that makes an agent play against all opponents
+        #if agents are emotional, their emotions have to be updated
         for adversary in opponents:
             if agent.agent_type == EMOTIONAL:
                 agent.update(self.neighbours(agent), adversary)
@@ -75,6 +78,7 @@ class World:
             self.prisonersDilemma(agent, adversary)
 
     def outputGains(self, epoch):
+        #writes output to csv file
         total_emotion_gain = 6 * [0]
         total_emotions_played = 6 * [0]
         for x in range(self.size):
@@ -199,6 +203,7 @@ class World:
         return sum
 
 def plot():
+    #plots the gains using matplotlib
     file = open("gain_per_type.csv", "r")
     labels = ["joy", "distress", "pity", "anger", "cooperate", "defect"]
     data = np.loadtxt(file, delimiter=',',usecols=range(7) , unpack=True)
@@ -210,53 +215,6 @@ def plot():
 
 
 def main():
-    # print("Simulation params:", flush=True)
-    # world = World()
-    # print("Epochs =",EPOCHS," grid_size = (",SIZE,",",SIZE,"), pct cooperator/defector and emotional = 50/50")
-    # print("Points_threshold =",POINTS_THRESHOLD," neighbour_threshold =",NEIGHBOUR_THRESHOLD)
-    # print("INITIAL GRID")
-    # for x in range(world.size):
-    #     for y in range(world.size):
-    #         print(world.grid[x][y].agent_type, end=" ")
-    #     print()
-    # print("=============================")
-    # world.runSimulation()
-    # print("=============================")
-    # print("Agent types")
-    # for x in range(world.size):
-    #     for y in range(world.size):
-    #         print(world.grid[x][y].agent_type, end=" ")
-    #     print()
-    # print("=============================")
-    # print("EMOTIONS")
-    # for x in range(world.size):
-    #     for y in range(world.size):
-    #         print(world.grid[x][y].emotion, end=" ")
-    #     print()
-
-
-    # #calculate total amount of gain per emotion
-    # total_emotion_gain = 6 * [0]
-    # for x in range(world.size):
-    #     for y in range(world.size):
-    #         for type in range(6):
-    #             total_emotion_gain[type] += world.grid[x][y].typedGains[type]
-
-    # #print total gain per emotion and types
-    # print("Emotional gain")
-    # for type in range(6):
-    #     print(total_emotion_gain[type])
-
-
-    # points = world.getTotalPoints()
-    # print("Total points =", points)
-
-    # print("strategies played")
-    # print("Cooperating: " + str(total_emotion_gain[COOPERATE]))
-    # print("Defecting: " + str(total_emotion_gain[DEFECT]))
-
-
-
     coop_file = open("paramsweep/coop_rate.csv", "w")
     coop_file.write("neighbours_threshold,points_threshold,coop_rate\n")
     neigh_vals = range(1, 9, 1)
@@ -271,21 +229,4 @@ def main():
             coop_rate = world.countStrategy[COOPERATE] / sum(world.countStrategy)
             coop_file.write(str(n_v) + "," + str(p_v) + "," + str(coop_rate) + "\n")
 
-
-    #plot()
-    '''
-    print("** PLAYS: **************")
-    for x in range(world.size):
-        for y in range(world.size):
-            print(world.grid[x][y].plays, end=" ")
-        print()
-
-    for x in range(world.size):
-        for y in range(world.size):
-            print(world.grid[x][y].joy, end=" ")
-            print(world.grid[x][y].distress, end=" ")
-            print(world.grid[x][y].pity, end=" ")
-            print(world.grid[x][y].anger, end=" ")
-        print()
-    '''
 main()

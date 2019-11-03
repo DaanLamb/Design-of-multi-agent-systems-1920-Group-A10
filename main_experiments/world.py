@@ -9,13 +9,6 @@ import matplotlib.pyplot as plt
 Every agents plays the prisoners dilemma.
 When all agents have played, the agent with the highest score is determined
 and copied to the other squared in his neighbourhood
-
-Matrix:
-      s      b
-  s  4 4    2 5
-  b  5 2    3 3
-
-
 '''
 
 
@@ -30,6 +23,7 @@ class World:
             sys.exit("ERROR: Size should be larger than 3")
         self.size = size
         self.grid = self.generateGrid(size)
+        #this is where the results are written to
         self.file = open("gain_per_type.csv", "w")
         self.countStrategy = 2 * [0]
 
@@ -63,6 +57,8 @@ class World:
                 self.grid[x][y].round_points = 0
 
     def playGames(self, agent, opponents):
+        #function that makes an agent play against all opponents
+        #if agents are emotional, their emotions have to be updated
         for adversary in opponents:
             if agent.agent_type == EMOTIONAL:
                 agent.update(self.neighbours(agent), adversary)
@@ -71,6 +67,7 @@ class World:
             self.prisonersDilemma(agent, adversary)
 
     def outputGains(self, epoch):
+        #writes output to csv file
         total_emotion_gain = 6 * [0]
         total_emotions_played = 6 * [0]
         for x in range(self.size):
@@ -196,6 +193,7 @@ class World:
         return sum
 
 def plot():
+    #plots the gains using matplotlib
     file = open("gain_per_type.csv", "r")
     labels = ["joy", "distress", "pity", "anger", "cooperate", "defect"]
     data = np.loadtxt(file, delimiter=',',usecols=range(7) , unpack=True)
@@ -252,20 +250,4 @@ def main():
     print("Cooperating: " + str(total_emotion_gain[COOPERATE]))
     print("Defecting: " + str(total_emotion_gain[DEFECT]))
 
-    #plot()
-    '''
-    print("** PLAYS: **************")
-    for x in range(world.size):
-        for y in range(world.size):
-            print(world.grid[x][y].plays, end=" ")
-        print()
-
-    for x in range(world.size):
-        for y in range(world.size):
-            print(world.grid[x][y].joy, end=" ")
-            print(world.grid[x][y].distress, end=" ")
-            print(world.grid[x][y].pity, end=" ")
-            print(world.grid[x][y].anger, end=" ")
-        print()
-    '''
 main()

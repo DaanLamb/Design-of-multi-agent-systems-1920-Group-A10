@@ -39,6 +39,8 @@ class Agent:
         self.updateStrategy()
 
     def updateScore(self, score):
+        #updates the internal score of the agent
+        #also handles score per emotion
         self.points += score
         self.round_points += score
         if self.agent_type == EMOTIONAL:
